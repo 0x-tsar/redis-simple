@@ -1,8 +1,8 @@
-set name ANYNAME
-get name RETURNS NAME VALUE
-keys \* GETS ALL KEYS
-exists name
-flushall DELETES ALL FILES
-ttl name GETS THE EXPIRATION TIME FOR A VARIABLE
-expire name 10 EXPIRES IN 10 SECONDS
-setex name 10 gustavo SETS VALUE WITH EXPIRATION DATE
+- set name ANYNAME
+- get name RETURNS NAME VALUE
+- keys \* GETS ALL KEYS
+- exists name
+- flushall DELETES ALL FILES
+- ttl name GETS THE EXPIRATION TIME FOR A VARIABLE
+- expire name 10 EXPIRES IN 10 SECONDS
+- setex name 10 gustavo SETS VALUE WITH EXPIRATION DATE
