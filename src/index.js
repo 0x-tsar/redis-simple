@@ -33,30 +33,27 @@ mongoose
   .catch((e) => console.log(e));
 
 app.post("/person", async (req, res) => {
-  // const { name, age, approved } = req.body;
-  console.log(req.body);
+  const { name, age, approved } = req.body;
 
-  // const { name, salary, approved } = req.body;
+  if (!name || !age || !approved) {
+    res.status(422).json({ error: "All the fields are obligatory!" });
+  }
+
   res.status(200).json({ message: "ok" });
-  // if (!name) {
-  //   res.status(422).json({ error: "name is obligatory" });
-  // }
-  // const person = {
-  //   name,
-  //   salary,
-  //   approved,
-  // };
-  // try {
-  //   await Person.create(person);
-  //   res.status(201).json({ message: "Person inserted to db sucessufuly" });
-  //   // const Cat = mongoose.model("Cat", { name: String });
-  //   // const kitty = new Cat({ name: "Zildjian" });
-  //   // kitty.save().then(() => console.log("meow"));
-  // } catch (error) {
-  //   console.error(error);
-  //   //not a good thing to send the error message to the api
-  //   res.status(500).json({ error: error });
-  // }
+
+  const person = {
+    name,
+    salary,
+    approved,
+  };
+  try {
+    await Person.create(person);
+    res.status(201).json({ message: "Person inserted to db sucessufuly" });
+  } catch (error) {
+    console.error(error);
+    //not a good thing to send the error message to the api
+    res.status(500).json({ error: error });
+  }
   // res.json({ message: "hello world from post" });
 });
 
