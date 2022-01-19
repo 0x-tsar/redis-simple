@@ -22,33 +22,38 @@ app.use(
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log(`connected to MONGODB!`);
-    app.listen(PORT, () => {
-      console.log(`listening to port ${PORT}`);
-    });
-  })
-  .catch((e) => console.log(e));
+const connect = async () => {
+  mongoose
+    .connect(MONGO_URI)
+    .then(() => {
+      console.log(`connected to MONGODB!`);
+      app.listen(PORT, () => {
+        console.log(`listening to port ${PORT}`);
+      });
+    })
+    .catch((e) => console.log(e));
+};
+
+connect();
 
 app.post("/person", async (req, res) => {
-  const { name, age, approved } = req.body;
+  const { name, salary, approved } = req.body;
 
-  if (!name || !age || !approved) {
+  if (!name && !salary && !approved) {
     res.status(422).json({ error: "All the fields are obligatory!" });
   }
-
-  res.status(200).json({ message: "ok" });
 
   const person = {
     name,
     salary,
     approved,
   };
+
   try {
-    await Person.create(person);
-    res.status(201).json({ message: "Person inserted to db sucessufuly" });
+    const p = await Person.create(person);
+    console.log(p);
+    res.status(201).json({ person });
+    // res.status(201).json({ message: "Person inserted to db sucessufuly" });
   } catch (error) {
     console.error(error);
     //not a good thing to send the error message to the api
@@ -59,6 +64,24 @@ app.post("/person", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "working! 🌱⛈" });
+});
+
+app.get("/all", async (req, res) => {
+  const data = await Person.find({});
+  res.json({ data });
+});
+
+app.get("/:id", async (req, res) => {
+  connect();
+  // const id = req.params.id;
+  // const data = await Person.findOne(id);
+  const data = (await Person.find({})).filter((e) => e.name == "john doe 3");
+  // const data = await Person.findById(id);
+  console.log(Object.keys(data).length);
+  if (Object.keys(data).length === 0) {
+    res.json("no results found in the database");
+  }
+  res.json({ data });
 });
 
 // app.get("/:id", (req, res) => {
