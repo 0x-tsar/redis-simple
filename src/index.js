@@ -22,19 +22,15 @@ app.use(
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-const connect = async () => {
-  mongoose
-    .connect(MONGO_URI)
-    .then(() => {
-      console.log(`connected to MONGODB!`);
-      app.listen(PORT, () => {
-        console.log(`listening to port ${PORT}`);
-      });
-    })
-    .catch((e) => console.log(e));
-};
-
-connect();
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log(`connected to MONGODB!`);
+    app.listen(PORT, () => {
+      console.log(`listening to port ${PORT}`);
+    });
+  })
+  .catch((e) => console.log(e));
 
 app.post("/person", async (req, res) => {
   const { name, salary, approved } = req.body;
@@ -72,10 +68,10 @@ app.get("/all", async (req, res) => {
 });
 
 app.get("/:id", async (req, res) => {
-  connect();
   // const id = req.params.id;
   // const data = await Person.findOne(id);
-  const data = (await Person.find({})).filter((e) => e.name == "john doe 3");
+  // const data = (await Person.find({})).filter((e) => e.name == "john doe 3");
+  const data = (await Person.find({})).filter((e) => e.salary === 3000);
   // const data = await Person.findById(id);
   console.log(Object.keys(data).length);
   if (Object.keys(data).length === 0) {
