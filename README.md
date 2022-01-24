@@ -1,3 +1,10 @@
+## <h1>Redis Process</h1>
+
+$ `redis-server` runs the local server
+$ `redis-cli` opens terminal to use from terminal
+
+---
+
 - set name ANYNAME
 - get name RETURNS NAME VALUE
 - keys \* GETS ALL KEYS

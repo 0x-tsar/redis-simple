@@ -7,6 +7,9 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const Person = require("../models/Person");
 //
+const Redis = require("redis");
+
+const redis = Redis.createClient();
 
 const app = express();
 app.use(cors());
@@ -47,7 +50,6 @@ app.post("/person", async (req, res) => {
 
   try {
     const p = await Person.create(person);
-    console.log(p);
     res.status(201).json({ person });
     // res.status(201).json({ message: "Person inserted to db sucessufuly" });
   } catch (error) {
@@ -63,22 +65,39 @@ app.get("/", (req, res) => {
 });
 
 app.get("/all", async (req, res) => {
+  if (req.method === "post") {
+    console.log(req.body);
+    res.json({ message: "post!" });
+  }
+
   const data = await Person.find({});
   res.json({ data });
 });
 
-app.get("/:id", async (req, res) => {
-  // const id = req.params.id;
-  // const data = await Person.findOne(id);
-  // const data = (await Person.find({})).filter((e) => e.name == "john doe 3");
-  const data = (await Person.find({})).filter((e) => e.salary === 3000);
-  // const data = await Person.findById(id);
-  console.log(Object.keys(data).length);
-  if (Object.keys(data).length === 0) {
-    res.json("no results found in the database");
+app.get("/filter", async (req, res) => {
+  const data = await (
+    await Person.find({})
+  ).filter((item) => parseInt(item.salary) > 3000);
+
+  if (Object.keys(data).length > 0) {
+    res.status(200).json(data);
   }
-  res.json({ data });
+
+  res.status(404).json({ message: "no data found" });
 });
+
+// app.get("/:id", async (req, res) => {
+//   // const id = req.params.id;
+//   // const data = await Person.findOne(id);
+//   // const data = (await Person.find({})).filter((e) => e.name == "john doe 3");
+//   const data = (await Person.find({})).filter((e) => e.salary === 3000);
+//   // const data = await Person.findById(id);
+//   console.log(Object.keys(data).length);
+//   if (Object.keys(data).length === 0) {
+//     res.json("no results found in the database");
+//   }
+//   res.json({ data });
+// });
 
 // app.get("/:id", (req, res) => {
 //   const id = req.params.id;

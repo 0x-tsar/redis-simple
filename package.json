@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "dev2": "nodemon ./src/fetcher.js",
+    "dev3": "nodemon ./src/api.js"
   },
   "repository": {
     "type": "git",
@@ -19,13 +21,14 @@
   },
   "homepage": "https://github.com/BronzeDisc/redis-simple#readme",
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "cors": "^2.8.5",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "helmet": "^5.0.1",
     "mongoose": "^6.1.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "redis": "^4.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
